@@ -1,11 +1,21 @@
-FROM python:3.9
+FROM python:3.13.11-slim
 
-RUN pip install pandas
+# Copy uv binary from official uv image (multi-stage build pattern)
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/
 
-WORKDIR /app
+WORKDIR /code
 
-COPY pipeline.py pipeline.py
+
+# Add virtual environment to PATH so we can use installed packages
+ENV PATH="/code/.venv/bin:$PATH"
+
+# Copy dependency files first (better layer caching)
+COPY "pyproject.toml" "uv.lock" ".python-version" ./
+
+RUN uv sync --locked
+
+COPY pipeline.py .
 
 # ENTRYPOINT [ "bash" ]
 
-ENTRYPOINT [ "python",  "pipeline.py" ]
+ENTRYPOINT [  "python",  "pipeline.py" ]
