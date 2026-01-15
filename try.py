@@ -47,3 +47,17 @@ docker run -it \
   --network=pg-network \
   --name pgadmin \
   dpage/pgadmin4
+
+
+
+
+docker build -t data-talks:latest .
+
+docker run -it data-talks:latest   
+
+
+
+
+docker-compose down --volumes --remove-orphans
+docker-compose build
+docker-compose up

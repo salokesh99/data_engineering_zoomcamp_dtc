@@ -1,3 +1,5 @@
+# FROM python:3.13.11-slim
+
 FROM python:3.13.11-slim
 
 # Copy uv binary from official uv image (multi-stage build pattern)
@@ -16,6 +18,6 @@ RUN uv sync --locked
 
 COPY ingest_data.py .
 
-# ENTRYPOINT [ "bash" ]
+ENTRYPOINT [ "bash" ]
 
-ENTRYPOINT [  "python",  "ingest_data.py" ]
+# ENTRYPOINT [  "python",  "ingest_data.py" ]
